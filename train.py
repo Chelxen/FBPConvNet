@@ -7,7 +7,7 @@ import os
 from utils import load_data, load_checkpoint, cmap_convert
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
 def data_argument(noisy, orig):
@@ -17,7 +17,7 @@ def data_argument(noisy, orig):
         rate = np.random.random()
         if rate > 0.5:
             noisy[i] = noisy[i].flip(2)
-            orig[i] = orig[i].flip(2)
+            orig[i] = orig[i].flip(2) 
 
     # flip vertical
     for i in range(noisy.shape[0]):
@@ -113,16 +113,16 @@ def main(config):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--epoch', type=int, default=151)
+    parser.add_argument('--epoch', type=int, default=20)   
     parser.add_argument('--learning_rate', type=tuple, default=np.logspace(-2, -3, 20))
     parser.add_argument('--grad_max', type=float, default=0.01)
     parser.add_argument('--batch_size', type=int, default=1)
     parser.add_argument('--momentum', type=float, default=0.99)
-    parser.add_argument('--data_path', type=str, default='./preproc_x20_ellipse_fullfbp.mat')
+    parser.add_argument('--data_path', type=str, default='enter_your_data_path_here.pt')  # Path to your training data
     parser.add_argument('--sample_step', type=int, default=100)
-    parser.add_argument('--sample_dir', type=str, default='./samples/')
+    parser.add_argument('--sample_dir', type=str, default='./sampler/Bahareh_PCCT/')    # save sample images
     parser.add_argument('--checkpoint_save_step', type=int, default=10)
-    parser.add_argument('--checkpoint_dir', type=str, default='./checkpoints/')
+    parser.add_argument('--checkpoint_dir', type=str, default='./checkpoints/') 
     config = parser.parse_args()
     print(config)
     main(config)
