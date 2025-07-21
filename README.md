@@ -1,6 +1,7 @@
 # FBPConvNet pytorch
 
 A pytorch implement of FBPConvNet.
+Self-use only.
 
 ## References
 
