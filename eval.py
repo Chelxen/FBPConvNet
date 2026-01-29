@@ -23,9 +23,8 @@ def eval(config):
     fbp_conv_net.eval()
 
     print('load testing data')
-    # noisy, orig = load_data(config.data_path, device, mode='eval')
-    noisy, orig = load_data(config.data_path, device=device, mode='train')
-    print("Loaded data shapes:", noisy.shape, orig.shape)
+    noisy = load_data(config.data_path, device)
+    orig = load_data(config.gt_path, device)
 
     if not os.path.exists(config.eval_result_dir):
         os.mkdir(config.eval_result_dir)
@@ -41,6 +40,7 @@ def eval(config):
             noisy_image_path = os.path.join(config.eval_result_dir, '%d-noisy.jpg' % (i * config.batch_size + j + 1))
             pred_image_path = os.path.join(config.eval_result_dir, '%d-pred.jpg' % (i*config.batch_size+j+1))
             orig_image_path = os.path.join(config.eval_result_dir, '%d-orig.jpg' % (i*config.batch_size+j+1))
+
             if config.cmap_convert:
                 noisy_image = cmap_convert(noisy_batch[j].squeeze())
                 noisy_image.save(noisy_image_path)
@@ -74,12 +74,11 @@ def eval(config):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--checkpoint_dir', type=str, default='./checkpoints/')
-    parser.add_argument('--data_path', type=str, default='/home/Pratice/AAPM_low_dose_LEAP/AAPM_leap_128of1000_img_test.pt')
+    parser.add_argument('--data_path', type=str, default='/train/90')
+    parser.add_argument('--gt_path', type=str, default='/train/gt')
     parser.add_argument('--batch_size', type=int, default=1)
-    parser.add_argument('--eval_result_dir', type=str, default='./AAPM_leap_125of1000_eval/')
+    parser.add_argument('--eval_result_dir', type=str, default='./eval_results')
     parser.add_argument('--cmap_convert', type=bool, default=True)
-    # parser.add_argument('--data_input', type=str, default='/mnt/4b9cdae1-f581-4f95-aa23-5b45c0bdf521/changsheng/pytorch-template-medical-image-restoration/dataset/AAPM/Low_dose')    
-    # parser.add_argument('--data_gt', type=str, default='/mnt/4b9cdae1-f581-4f95-aa23-5b45c0bdf521/changsheng/pytorch-template-medical-image-restoration/dataset/AAPM/High_dose')
     config = parser.parse_args()
     print(config)
     eval(config)
